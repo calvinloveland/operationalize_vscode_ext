@@ -2,7 +2,11 @@
   "name": "operationalize-code-ext",
   "displayName": "operationalize-code-ext",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calvinloveland/operationalize_vscode_ext.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -13,8 +17,8 @@
   "main": "./opt-extension.js",
   "contributes": {
     "commands": [{
-      "command": "operationalize-code-ext.helloWorld",
-      "title": "Hello World"
+      "command": "operationalize-code-ext.optTest",
+      "title": "operationalize Test"
     }]
   },
   "scripts": {
