@@ -22,8 +22,39 @@ function activate(context) {
 function deactivate() {}
 
 function update_status_bar_item() {
-	operationalize_status_bar_item.text = "Operationalize";
-	operationalize_status_bar_item.show();
+	let prepend = "{{gear}}OPR:"		
+	var output_text = prepend
+	// Read TODO file and update status bar item
+	vscode.workspace.findFiles('**/TODO.txt').then((uris) => {
+		if (uris.length > 0) {
+			let uri = uris[0];
+			vscode.workspace.openTextDocument(uri).then((doc) => {
+				let text = doc.getText();
+				let lines = text.split('\n');
+				// Find the first line that matches the TODO pattern
+				// (AA) Something to do
+				let todo_line = lines.find((line) => {
+					return line.match(/^\([A-Z]+\)/);
+				});
+				if (todo_line) {
+					// Remove the TODO pattern from the line
+					let todo_text = todo_line.replace(/^\([A-Z]+\)/, '');
+					// Remove the trailing key-value pairs
+					todo_text = todo_text.replace(/\s+\w+:\w+$/, '');
+					// Remove the trailing whitespace
+					todo_text = todo_text.trim();
+					// Remove the leading whitespace
+					todo_text = todo_text.replace(/^\s+/, '');
+					output_text += todo_text;
+				} else {
+					output_text += "Nothing to do";
+				}
+				operationalize_status_bar_item.text = output_text;
+				operationalize_status_bar_item.show();
+			}
+		)}
+	}
+	)
 }
 
 module.exports = {
