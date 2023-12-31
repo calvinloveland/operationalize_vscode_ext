@@ -15,14 +15,16 @@ function activate(context) {
 	console.log('Congratulations, your extension "operationalize" is now active!');
 	operationalize_status_bar_item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
 	context.subscriptions.push(operationalize_status_bar_item);
-	update_status_bar_item();
+	// Update the status bar every second
+	setInterval(update_status_bar_item, 1000);
+
 }
 
 // This method is called when your extension is deactivated
 function deactivate() {}
 
 function update_status_bar_item() {
-	let prepend = "{{gear}}OPR:"		
+	let prepend = "$(gear)OPR: "		
 	var output_text = prepend
 	// Read TODO file and update status bar item
 	vscode.workspace.findFiles('**/TODO.txt').then((uris) => {
@@ -46,15 +48,16 @@ function update_status_bar_item() {
 					// Remove the leading whitespace
 					todo_text = todo_text.replace(/^\s+/, '');
 					output_text += todo_text;
-				} else {
-					output_text += "Nothing to do";
-				}
-				operationalize_status_bar_item.text = output_text;
-				operationalize_status_bar_item.show();
+				} 
 			}
-		)}
+		)} 
 	}
 	)
+	if (output_text == prepend) {
+				output_text += "See the webUI";
+	}
+	operationalize_status_bar_item.text = output_text;
+	operationalize_status_bar_item.show();
 }
 
 module.exports = {
